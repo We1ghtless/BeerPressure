@@ -19,7 +19,7 @@ TRENDING = "https://api.untappd.com/v4/beer/trending"
 @app.route("/", methods=["GET"])
 def home():
 
-    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    ip = request.environ['REMOTE_ADDR']
     print(ip)
 
     location_request = location_url.format(ip)
