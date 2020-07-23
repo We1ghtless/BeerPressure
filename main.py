@@ -40,7 +40,7 @@ def home():
 
     beers = data['response']['macro']['items']
 
-    return render_template("home.html", beers=beers, lat=lat, lon=lo)
+    return render_template("home.html", beers=beers, lat=lat, lon=lon)
 
 if __name__ == "__main__":
     if 'liveconsole' not in gethostname():
