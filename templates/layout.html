@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Beer Pressure</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/master.css') }}">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="icon"
+  type="image/png"
+  href="{{url_for('static', filename='images/beer-icon.png')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='glide/dist/css/glide.core.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='glide/dist/css/glide.theme.min.css')}}">
+
+
+</head>
+{% include 'include/_navbar.html' %}
+<body>
+  <main class="main">
+    {% from '/include/_formhelpers.html' import render_field %}
+
+    {%  block body %} {% endblock %}
+  </main>
+  <hr>
+  <div class="credit">Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+</body>
+</html>

@@ -1,88 +1,43 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Beer Pressure</title>
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-  </head>
-  <body onload="getLocation()">
+{% extends 'layout.html' %}
 
-    {% block body %}
+{% block body %}
 
-    <div class="content">
-      <div class="home-page">
-        <div class="header-text">
-          <p style="font-size:1.25em;">Beer Pressure is powered by the Untappd api. Here you can view the popualr beers in your area, breweries and venues around the world where people are drinking the same beers as you.</p>
-          <hr>
-          <h1 style="margin:0;">Popular beers in your area</h1>
-        </div>
-        <div class="col">
-          {% for beer in beers %}
-            <div class="col-item">
-              <img class="home-image" src="{{beer.beer.beer_label}}" alt="">
-              <div class="home-basic">
-                <a href="/beer/{{beer.beer.bid}}">
-                  <h2 class="beer-name">{{beer.beer.beer_name}}</h2>
-                </a>
-                <a href="/brewery/{{beer.brewery.brewery_id}}">
-                  <p class="home-brewery">{{beer.brewery.brewery_name}}</p>
-                </a>
-                <p class="home-style">{{beer.beer.beer_style}}</p>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-        <!-- <div class="col2">
-          <p>Popular beers in your area</p>
-          <hr>
-          {% for i in pubs %}
-            <div class="pub">
-              <a href="/beer/{{i.beer.bid}}"><img class="pub-image"src="{{i.beer.beer_label}}" alt=""></a>
-              <a class="pub-text" href="/beer/{{i.beer.bid}}">{{i.beer.beer_name}}</a>
-            </div>
-          {% endfor %}
-        </div> -->
-      </div>
+<div class="content">
+  <div class="home-page">
+    <div class="header-text">
+      <p style="font-size:1.25em;">Beer Pressure is powered by the Untappd api. Here you can view the popualr beers in your area, breweries and venues around the world where people are drinking the same beers as you.</p>
+      <hr>
+      <h1 style="margin:0;">Popular beers around the world</h1>
     </div>
+    <div class="col">
+      {% for beer in beers %}
+        <div class="col-item">
+          <a href="/beer/{{beer.beer.bid}}">
+            <img class="home-image" src="{{beer.beer.beer_label}}" alt="">
+          </a>
+          <div class="home-basic">
+            <a href="/beer/{{beer.beer.bid}}">
+              <h1 class="beer-name">{{beer.beer.beer_name}}</h1>
+            </a>
+            <a href="/brewery/{{beer.brewery.brewery_id}}">
+              <p class="home-brewery">{{beer.brewery.brewery_name}}</p>
+            </a>
+            <p class="home-style">{{beer.beer.beer_style}}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- <div class="col2">
+      <p>Popular beers in your area</p>
+      <hr>
+      {% for i in pubs %}
+        <div class="pub">
+          <a href="/beer/{{i.beer.bid}}"><img class="pub-image"src="{{i.beer.beer_label}}" alt=""></a>
+          <a class="pub-text" href="/beer/{{i.beer.bid}}">{{i.beer.beer_name}}</a>
+        </div>
+      {% endfor %}
+    </div> -->
+  </div>
+</div>
 
-    {% endblock %}  </body>
-</html>
-
-<script>
-
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    alert("Geolocation is not supported by this browser.")
-  }
-}
-//
-function showPosition(position) {
-  var lat = position.coords.latitude
-  var lon = position.coords.longitude
-
-  const data = JSON.stringify({
-  lat: lat,
-  lon: lon
-})
-
-const xhr = new XMLHttpRequest()
-xhr.withCredentials = true
-
-xhr.addEventListener('readystatechange', function() {
-  if (this.readyState === this.DONE) {
-    console.log(this.responseText)
-  }
-})
-
-xhr.open('POST', 'http://weightless.pythonanywhere.com/post')
-xhr.setRequestHeader('content-type', 'application/json')
-xhr.setRequestHeader('authorization', 'Bearer 123abc456def')
-
-xhr.send(data)
-
-}
-
-</script>
+{% endblock %}

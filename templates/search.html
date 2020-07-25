@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="content">
+  <div class="">
+    <h1>Results for: {{input}}</h1>
+    <hr>
+  </div>
+  <div class="grid">
+    {% for beer in beers %}
+      <div class="grid-item">
+        <a href="/beer/{{beer.beer.bid}}">
+          <img class="search-image" src="{{beer.beer.beer_label}}" alt="">
+        </a>
+        <div style="">
+          <a class="" href="/beer/{{beer.beer.bid}}">
+            <p class="beer-name">{{beer.beer.beer_name}}</p>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
