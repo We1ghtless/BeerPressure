@@ -5,10 +5,6 @@ import json
 
 app = Flask(__name__)
 
-# location urly
-location_url = "http://api.ipstack.com/{}?access_key=1151c98fdaced8a6c62e7c37a44e8da7"
-
-
 CLIENT_ID = "A3F72945ACFCA109BFC672EF1FA58A679AAB238B"
 CLIENT_SECRET = "B02EF4FC7AA1F189ED2CDE9E91D86C536828EFA0"
 
@@ -16,22 +12,36 @@ API_PARAMS = "?client_id={}&client_secret={}"
 
 TRENDING = "https://api.untappd.com/v4/beer/trending"
 
-@app.route("/", methods=["GET"])
+LOCAL = "https://api.untappd.com/v4/thepub/local"
+LOCAL_PARAMS = "&lat={}&lng={}&radius=75"
+
+user_data = []
+user_id = 0
+
+@app.route("/post", methods=["POST"])
+def post():
+
+    req_data = request.get_json()
+    location = json.dumps(req_data)
+    location_data = json.loads(location)
+
+    lat = location_data['lat']
+    lon = location_data['lon']
+
+    user_data.append(location_data)
+
+    global user_id
+
+    user_id = user_id + 1
+
+    print(user_data, user_id)
+
+    response = 'SUCCESS'
+
+    return response
+
+@app.route("/", methods=["GET", "POST"])
 def home():
-
-    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    print(ip)
-
-    location_request = location_url.format(ip)
-    location_response = urllib.request.urlopen(location_request)
-    location_data_temp = location_response.read()
-    location_data = json.loads(location_data_temp)
-    print(location_data)
-
-    lat = location_data['latitude']
-    lon = location_data['longitude']
-
-    print(lat, lon)
 
     api_url = TRENDING + API_PARAMS.format(CLIENT_ID, CLIENT_SECRET)
     trending_response = urllib.request.urlopen(api_url)
@@ -40,7 +50,24 @@ def home():
 
     beers = data['response']['macro']['items']
 
-    return render_template("home.html", beers=beers, lat=lat, lon=lon)
+    return render_template("home.html", beers=beers)
+
+@app.route("/local", methods=["GET"])
+def local():
+
+    print(user_id)
+
+    user_location = user_data[user_id-1]
+    lat = user_location['lat']
+    lon = user_location['lon']
+
+    local_url = LOCAL + API_PARAMS.format(CLIENT_ID, CLIENT_SECRET) + LOCAL_PARAMS.format(lat, lon)
+    local_response = urllib.request.urlopen(local_url)
+    json_data = local_response.read()
+    data = json.loads(json_data)
+    local_beers = data['response']['checkins']['items']
+
+    return render_template("home.html", beers=local_beers)
 
 if __name__ == "__main__":
     if 'liveconsole' not in gethostname():

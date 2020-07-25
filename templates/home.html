@@ -6,9 +6,7 @@
     <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
   </head>
-  <body>
-
-    {{lat}}{{lon}}
+  <body onload="getLocation()">
 
     {% block body %}
 
@@ -50,3 +48,41 @@
 
     {% endblock %}  </body>
 </html>
+
+<script>
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    alert("Geolocation is not supported by this browser.")
+  }
+}
+//
+function showPosition(position) {
+  var lat = position.coords.latitude
+  var lon = position.coords.longitude
+
+  const data = JSON.stringify({
+  lat: lat,
+  lon: lon
+})
+
+const xhr = new XMLHttpRequest()
+xhr.withCredentials = true
+
+xhr.addEventListener('readystatechange', function() {
+  if (this.readyState === this.DONE) {
+    console.log(this.responseText)
+  }
+})
+
+xhr.open('POST', 'http://weightless.pythonanywhere.com/post')
+xhr.setRequestHeader('content-type', 'application/json')
+xhr.setRequestHeader('authorization', 'Bearer 123abc456def')
+
+xhr.send(data)
+
+}
+
+</script>
